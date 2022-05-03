@@ -179,3 +179,7 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 #join-form { padding: 10px; text-align: center; }
 #hashtag-form { text-align: right; }
 footer { text-align: center; }
+
+/*
+프로필 수정 박스 및 버튼
+*/

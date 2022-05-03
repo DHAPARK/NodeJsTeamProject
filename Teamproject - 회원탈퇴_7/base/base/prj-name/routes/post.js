@@ -6,8 +6,6 @@ const fs = require('fs');
 const { Post, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
-
-
 const router = express.Router();
 
 try {
