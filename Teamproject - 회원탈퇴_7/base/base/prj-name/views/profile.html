@@ -32,11 +32,11 @@
       <form name="edit" id="edit-form" action="/edit/info" method="post">
         <input type="hidden" name="id" value="{{user.id}}">
         {% if user.email != null %}
-          <h3>이메일 주소</h3> <input type="email" class="check" name="email" value="{{user.email}}"><p></p>
-          <h3>비밀번호</h3> <input type="password" class="check" name="password"><p></p> 
+          <h3>이메일 주소</h3> <input type="email" id="email" class="check" name="email2" value="{{user.email}}"><p></p>
+          <h3>바꿀 비밀번호</h3> <input type="password" id="pw" class="check" name="password2"><p></p> 
         {% endif %}
-        <h3>닉네임</h3> <input type="text" class="check" name="nick" value="{{user.nick}}"><p></p>
-        <input type="hidden" name="provider" value="{{user.provider}}">
+        <h3>닉네임</h3> <input type="text" id="nick" class="check" name="nick2" value="{{user.nick}}"><p></p>
+        <input type="hidden" id="provider" name="provider" value="{{user.provider}}">
         <br/>
         <br/>
         <button id="edit-yes" type="submit" class="btn" onclick="check()">변 경</button>
@@ -47,13 +47,50 @@
     로그인하면 닉네임만 나오므로 위와 if 문을 사용.-->
   </div>
   <script>
+
     function check(){
       
-      if(confirm("변경하시겠습니까?")){
-        alert("변경되었습니다.");
+      const provider = document.getElementById("provider").value;
+      const nick = document.getElementById("nick").value;
+
+      if(provider == 'local'){
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("pw").value;
+        
+        if(password == ""){
+          alert("변경할 비밀번호를 입력하세요.");
+          event.preventDefault();
+        }
+        else if(email == ""){
+          alert("변경할 이메일을 입력하세요.");
+          event.preventDefault();
+        }
+        else if(nick == ""){
+          alert("변경할 닉네임을 입력하세요.");
+          event.preventDefault();
+        }
+        else{
+          if(confirm("변경하시겠습니까?")){
+            alert("변경되었습니다.");
+          }
+          else{
+            event.preventDefault();
+          } 
+        }
       }
-      else{
-        event.preventDefault();
+      else if(provider == 'kakao'){
+        if(nick == ""){
+          alert("변경할 닉네임을 입력하세요.");
+          event.preventDefault();
+        }
+        else{
+          if(confirm("변경하시겠습니까?")){
+            alert("변경되었습니다.");
+          }
+          else{
+            event.preventDefault();
+          }
+        }
       }
     }
   </script>

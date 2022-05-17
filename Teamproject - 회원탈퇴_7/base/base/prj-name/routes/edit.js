@@ -7,15 +7,31 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.post('/info', isLoggedIn, async (req, res, next) => {
-    const { id, email, password, nick, provider} = req.body;
-    try {
-      var user = await User.findOne({ where: { id } });
-      if(provider == 'kakao'){
-       
-      } 
-      else if(provider == 'local'){
-        
-      }
+  try{
+    if(req.body.provider == 'local'){
+      const id = req.body.id;
+      const email2 = req.body.email2;
+      const password2 = req.body.password2;
+      const nick2 = req.body.nick2;
+
+      const hash = await bcrypt.hash(password2, 12);
+      var user = await User.findOne({ where: { id } })
+
+      await user.update({
+        email: email2,
+        password: hash,
+        nick: nick2
+      })
+    }
+    else if(req.body.provider == 'kakao'){
+      const id = req.body.id;
+      const nick2 = req.body.nick2;
+
+      var kUser = await User.findOne({ where: { id } })
+      await kUser.update({
+        nick: nick2
+      })
+    }
       return res.redirect('/');
     } catch (error) {
       console.error(error);
