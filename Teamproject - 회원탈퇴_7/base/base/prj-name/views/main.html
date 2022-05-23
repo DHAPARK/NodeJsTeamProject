@@ -51,6 +51,15 @@
                 </div>
               {% endif %}
               <!-- 내글일시 비활버튼 -->
+
+              <!--트윗 좋아요-->
+              {% if not likedList.includes(twit.id) and twit.User.id !== user.id %}
+              <button class="twit-like">좋아요</button>
+              {% endif %}
+              {% if likedList.includes(twit.id) and twit.User.id !== user.id %}
+              <button class="twit-unlike">좋아요 취소</button>
+              {% endif %}
+
               <div class="twit-content">{{twit.content}}</div>
               {% if twit.img %}
                 <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
@@ -97,6 +106,15 @@
               </div>
             {% endif %}
             <!-- 내글일시 활성화버튼 -->
+
+            <!-- 트윗 좋아요 -->
+            {% if not likedList.includes(twit.id) and twit.User.id !== user.id %}
+            <button class="twit-like">좋아요</button>
+            {% endif %}
+            {% if likedList.includes(twit.id) and twit.User.id !== user.id %}
+            <button class="twit-unlike">좋아요 취소</button>
+            {% endif %}
+            
 
             <div class="twit-content">{{twit.content}}</div>
             {% if twit.img %}
@@ -181,6 +199,48 @@
       });
     });
     //팔로우 취소 이벤트주기
+
+
+
+    //트윗 좋아요 이벤트
+    document.querySelectorAll('.twit-like').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const twitId = tag.parentNode.querySelector('.twit-id').value;
+                if (confirm('해당 트윗을 좋아요 하시겠습니까?')) {
+                    axios.post(`/post/${twitId}/like`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
+            }
+        });
+    });
+
+
+    //트윗 좋아요 취소 이벤트
+    document.querySelectorAll('.twit-unlike').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const twitId = tag.parentNode.querySelector('.twit-id').value;
+                if (confirm('해당 트윗의 좋아요를 취소하시겠습니까?')) {
+                    axios.post(`/post/${twitId}/unlike`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
+            }
+        });
+    });
+
 
 
     //글비활성화 메서드
