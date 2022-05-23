@@ -4,11 +4,19 @@ const { Post, User, Hashtag } = require('../models');
 
 const router = express.Router();
 
-router.use((req, res, next) => {
+router.use(async (req, res, next) => {
   res.locals.user = req.user;
   res.locals.followerCount = req.user ? req.user.Followers.length : 0;
   res.locals.followingCount = req.user ? req.user.Followings.length : 0;
   res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
+
+  res.locals.likedList = []
+  if(req.user){
+    const user = await User.findOne({ where: { id: req.user.id } });
+    let likedList = await user.getLikedList({ include: [{model: User }]})
+    res.locals.likedList = req.user ? likedList.map(f => f.id) : [];
+}
+
   next();
 });
 
@@ -61,5 +69,6 @@ router.get('/hashtag', async (req, res, next) => {
     return next(error);
   }
 });
+
 
 module.exports = router;
