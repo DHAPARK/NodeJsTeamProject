@@ -1,6 +1,6 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User, Hashtag } = require('../models');
+const { Post, User, Hashtag, Comment } = require('../models');
 
 const router = express.Router();
 
@@ -30,9 +30,17 @@ router.get('/', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
+
+    const comments = await Comment.findAll({
+      attributes:['contents','UserId','postId','whoWrite'],      
+    });
+    console.log('comments 확인');
+    console.log(comments);
+
     res.render('main', {
       title: 'prj-name',
       twits: posts,
+      comments: comments,
     });
   } catch (err) {
     console.error(err);

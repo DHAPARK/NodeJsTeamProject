@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag,Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -131,7 +131,35 @@ router.post('/modifyPost',isLoggedIn,upload.none(),(req,res)=>{
 //글의 수정
 
 
+// //댓글 달고 재정비
+// router.get('/ReLoadCommentData',isLoggedIn,upload.none(),async (req,res)=>{
+//   //const userId = req.body.userId;
+//   const postId = req.body.postId;
+//   const content = req.body.content;
 
+//   console.log('modifyPost 연결확인');
+  
+//   var allComments = await Comment.findAll({ 
+//     attributes: ['UserId','contents','postId'],
+//   });
+
+//   const two = ()=>{
+//     return new Promise((resolve,reject)=>{
+      
+//       res.render('main', {
+//         title: 'prj-name',
+//         allcomments: allComments,
+//       });
+
+//       resolve();
+//     });
+//   }
+  
+//   await two();
+  
+//   //sequelize 업데이트 실험
+// })
+//댓글 달고 재정비
 
 
 
