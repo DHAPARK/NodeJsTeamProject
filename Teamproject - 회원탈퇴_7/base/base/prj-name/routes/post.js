@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag,Comment } = require('../models');
+const { Post, Hashtag,Comment, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -196,5 +196,39 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     next(error);
   }
 });
+
+//트윗 좋아요
+router.post('/:twitId/like', isLoggedIn, async (req, res, next) => {
+  try{
+      const user = await User.findOne({where: { id: req.user.id }});
+      const post = await Post.findOne({where: { id: req.params.twitId }})
+      if(user && post){
+          await user.addLikedList(parseInt(req.params.twitId), 10); //10진법
+          res.send('success');
+      }else {
+        res.status(404).send('no user or no post');
+      }
+  } catch(err){
+      console.error(err);
+      next(err);
+  }
+})
+
+//트윗 좋아요 취소
+router.post('/:twitId/unlike', isLoggedIn, async (req, res, next) => {
+  try{
+      const user = await User.findOne({where: { id: req.user.id }});
+      const post = await Post.findOne({where: { id: req.params.twitId }})
+      if(user && post){
+          await user.removeLikedList(parseInt(req.params.twitId), 10);
+          res.send('success');
+      }else {
+        res.status(404).send('no user or no post');
+      }
+  } catch(err){
+      console.error(err);
+      next(err);
+  }
+})
 
 module.exports = router;
